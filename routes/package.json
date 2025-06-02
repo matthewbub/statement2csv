@@ -11,7 +11,6 @@
     "start": "vite"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.15",
     "@tanstack/router-plugin": "^1.76.4",
     "@types/node": "^22.8.1",
     "@types/react": "^18.3.3",

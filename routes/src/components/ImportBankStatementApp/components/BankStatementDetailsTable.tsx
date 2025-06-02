@@ -11,7 +11,7 @@ import {
   RowSelectionState,
 } from "@tanstack/react-table";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Checkbox } from "@/components/catalyst/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Transaction } from "../ImportBankStatement.types";
 import importBankStatementStore from "../ImportBankStatement.store";
 import { useToast } from "@/hooks/use-toast";

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+
 const DARK_READER_ATTRIBUTE = "data-darkreader-scheme";
+
 export const useDarkReader = () => {
   const [isDarkReader, setIsDarkReader] = useState<boolean>(false);
 

@@ -1,18 +1,13 @@
 import {
-  Shield,
   FileText,
   PenToolIcon as Tool,
-  Brain,
   XCircle,
   Upload,
   LockIcon,
   ArrowDown,
 } from "lucide-react";
-import { StaticAnimatedSticker } from "./StaticAnimatedSticker";
-import { useAuthStore } from "@/stores/auth";
 import { useDarkReader } from "@/hooks/useDarkReader";
 import { cn } from "@/lib/utils";
-import Eyebrow from "./Eyebrow";
 
 export default function PrivateSecureFinancialAnalysis() {
   const isDarkReader = useDarkReader();
@@ -39,28 +34,36 @@ export default function PrivateSecureFinancialAnalysis() {
 
       <ul className="mt-8 space-y-6">
         {[
-          { icon: Upload, text: "Upload your financial document (PDF format)" },
+          {
+            icon: Upload,
+            text: "Upload your financial document (PDF format)",
+            color: "text-blue-500",
+          },
           {
             icon: FileText,
             text: "Select specific pages from your financial documents",
+            color: "text-blue-500",
           },
           {
             icon: Tool,
             text: "Use our Privacy Tool to redact sensitive information",
+            color: "text-blue-500",
           },
           // { icon: Brain, text: "AI-powered analysis with no data storage" },
           {
             icon: XCircle,
             text: "Automatic rejection of documents containing sensitive data",
+            color: "text-rose-500",
           },
           {
             icon: ArrowDown,
             text: "Export to CSV and be on your way",
+            color: "text-blue-500",
           },
         ].map((item, index) => (
           <li key={index} className="flex items-center space-x-3">
             <div className="flex-shrink-0">
-              <item.icon className="h-6 w-6 text-blue-500" />
+              <item.icon className={cn("h-6 w-6", item.color)} />
             </div>
 
             <p className="text-lg text-gray-700">{item.text}</p>
@@ -70,3 +73,18 @@ export default function PrivateSecureFinancialAnalysis() {
     </div>
   );
 }
+
+const Eyebrow: React.FC = () => {
+  return (
+    <div className="mb-6 inline-block rounded-full bg-blue-100 px-4 py-2 w-full md:w-auto border border-blue-300">
+      <div className="flex items-center space-x-2 text-blue-700">
+        <LockIcon className="h-5 w-5" />
+        <div className="flex flex-col md:flex-row md:items-center md:space-x-2">
+          <p className="text-sm font-semibold">
+            AI-driven insights, zero data storage
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};

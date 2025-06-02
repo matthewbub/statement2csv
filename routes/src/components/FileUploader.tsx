@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { Text } from "./catalyst/text";
-import { Button } from "./catalyst/button";
+import { Button } from "@/components/ui/button";
+
+const Text = ({ children }: { children: React.ReactNode }) => {
+  return <p className="text-sm text-gray-500">{children}</p>;
+};
 
 const FileUploader = ({
   onFileDrop = (_) => {

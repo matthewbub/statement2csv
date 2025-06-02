@@ -17,5 +17,5 @@ export default {
       colors: {},
     },
   },
-  plugins: [require("@tailwindcss/typography"), require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate")],
 };

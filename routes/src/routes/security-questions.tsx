@@ -2,7 +2,7 @@ import { useAuthStore } from "@/stores/auth";
 import * as React from "react";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useForm, Controller } from "react-hook-form";
-import { Button } from "@/components/catalyst/button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Select } from "@/components/catalyst/select";
+import { Select } from "@/components/ui/select";
 import { config } from "@/app_config";
 
 interface FormData {
@@ -90,7 +90,7 @@ function SecurityQuestionsForm() {
                 control={control}
                 rules={{ required: "Please select a question" }}
                 render={({ field }) => (
-                  <Select {...field} onChange={field.onChange}>
+                  <Select {...field} onValueChange={field.onChange}>
                     {questionOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}

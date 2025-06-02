@@ -41,7 +41,7 @@ func main() {
 	router := gin.Default()
 	router.Static("/_assets/", "./routes/dist/_assets")
 	router.NoRoute(func(c *gin.Context) {
-		logger.Printf("No route found for %s", c.Request.URL.Path)
+		// serve the app entry point here
 		c.File("./routes/dist/index.html")
 	})
 

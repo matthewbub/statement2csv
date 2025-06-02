@@ -1,16 +1,14 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/catalyst/button";
+import { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/catalyst/switch";
-import { Select } from "@/components/catalyst/select";
+import { Select } from "@/components/ui/select";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -25,25 +23,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Mail,
-  Lock,
-  Download,
-  Trash2,
-  FileText,
-  Palette,
-  Shield,
-} from "lucide-react";
+import { Mail, Trash2 } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useForm, Controller } from "react-hook-form";
 import { config } from "@/app_config";
 import { useAuthStore } from "@/stores/auth";
-import { Heading } from "@/components/catalyst/heading";
-import { Text } from "@/components/catalyst/text";
-import { DashboardWrapper } from "@/components/DashboardWrapper";
-import { SelectItem } from "@/components/ui/select";
 import { Authorized } from "@/components/Authorized";
 import { fetchWithAuth } from "@/utils/auth-helpers";
 import { useToast } from "@/hooks/use-toast";
@@ -550,3 +535,9 @@ function UpdateProfileInformation() {
     </Card>
   );
 }
+const Text = ({ children }: { children: React.ReactNode }) => {
+  return <p className="text-sm text-gray-500">{children}</p>;
+};
+const Heading = ({ children }: { children: React.ReactNode }) => {
+  return <h1 className="text-2xl font-bold">{children}</h1>;
+};

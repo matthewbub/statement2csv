@@ -24,7 +24,6 @@ export function LandingPageComponent() {
     <PublicLayout>
       <div className="pb-24 sm:pb-20 pt-10">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          {/* Pages {pagesProcessed} */}
           <PrivateSecureFinancialAnalysis />
           <div className="mt-16 flow-root">
             <ImportBankStatement

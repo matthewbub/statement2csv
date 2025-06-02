@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 interface AnimatedStickerProps {
   mainText: string;
@@ -33,7 +33,9 @@ export function StaticAnimatedSticker({
   return (
     <>
       <div
-        className={`bg-yellow-300 text-black font-bold py-6 px-10 rounded-lg transform md:rotate-6 shadow-lg  mb-4 md:mb-0 ${isAnimated ? "animate-bob" : ""}`}
+        className={`bg-yellow-300 text-black font-bold py-6 px-10 rounded-lg transform md:rotate-6 shadow-lg  mb-4 md:mb-0 ${
+          isAnimated ? "animate-bob" : ""
+        }`}
       >
         <p className="text-xl mb-1">{mainText}</p>
         <p className="text-3xl mb-2">{subText}</p>
