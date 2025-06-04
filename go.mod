@@ -1,8 +1,8 @@
 module bus.zcauldron.com
 
-go 1.23.0
+go 1.24.1
 
-toolchain go1.23.1
+toolchain go1.24.3
 
 require (
 	github.com/gin-contrib/sessions v1.0.4
@@ -19,6 +19,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/ledongthuc/pdf v0.0.0-20250511090121-5959a4027728 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 )

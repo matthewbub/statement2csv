@@ -262,10 +262,13 @@ const importBankStatementStore = create<State & Action>()(
             formData.append("file", file);
 
             try {
-              const pageCountResponse = await fetch("/api/v1/pdf/page-count", {
-                method: "POST",
-                body: formData,
-              });
+              const pageCountResponse = await fetch(
+                "/api/v1/pdf/page-count-native",
+                {
+                  method: "POST",
+                  body: formData,
+                }
+              );
 
               const pageCountData = await pageCountResponse.json();
               if (!pageCountResponse.ok) throw new Error(pageCountData.error);

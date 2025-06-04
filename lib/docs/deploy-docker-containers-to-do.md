@@ -40,5 +40,3 @@ This is just my preferred flow, feel free to let me know what you might do diffe
   ```
 
 (This may take a while the first time around, NOTE you will encounter CORS errors when trying to visit the application via IP address alone. Cuz we are listening for that IP so CORS will auto-reject it. It's advised to leave this as-is for security concerns.)
-
--

@@ -17,6 +17,7 @@ import (
 	"bus.zcauldron.com/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/ledongthuc/pdf"
 )
 
 type PythonResponseData struct {
@@ -295,6 +296,7 @@ func ExtractPDFText(c *gin.Context) {
 	c.JSON(200, statement)
 }
 
+// Deprecated: Use GetPDFPageCountNative instead.
 func GetPDFPageCount(c *gin.Context) {
 	logger := utils.GetLogger()
 
@@ -380,6 +382,124 @@ func GetPDFPageCount(c *gin.Context) {
 		NumPages: pythonResp.NumPages,
 		FileID:   fileID,
 	})
+}
+
+func GetPDFPageCountNative(c *gin.Context) {
+	// TODO make sure user is authenticated
+	logger := utils.GetLogger()
+
+	file, err := c.FormFile("file")
+	if err != nil {
+		logger.Printf("No file uploaded: %v", err)
+		c.JSON(400, gin.H{"error": "No file uploaded"})
+		return
+	}
+
+	// Check file size first
+	src, err := file.Open()
+	if err != nil {
+		logger.Printf("Failed to open uploaded file: %v", err)
+		c.JSON(500, gin.H{"error": "Failed to open uploaded file"})
+		return
+	}
+	defer src.Close()
+
+	// Move to end to get file size
+	fileSize, err := src.Seek(0, io.SeekEnd)
+	if err != nil {
+		logger.Printf("Failed to determine file size: %v", err)
+		c.JSON(500, gin.H{"error": "Failed to determine file size"})
+		return
+	}
+
+	// Reset to beginning
+	_, err = src.Seek(0, io.SeekStart)
+	if err != nil {
+		logger.Printf("Failed to reset file position: %v", err)
+		c.JSON(500, gin.H{"error": "Failed to reset file position"})
+		return
+	}
+
+	logger.Printf("Processing PDF upload of size: %.2fMB", float64(fileSize)/1024/1024)
+
+	// Check file size against limit (same as original)
+	const maxFileSize = 10 * 1024 * 1024 // 10MB
+	if fileSize > maxFileSize {
+		logger.Printf("PDF upload rejected - file size %.2fMB exceeds limit", float64(fileSize)/1024/1024)
+		c.JSON(400, gin.H{"error": "File size exceeds the maximum limit of 10 MB"})
+		return
+	}
+
+	// Check PDF header
+	header := make([]byte, 4)
+	_, err = src.Read(header)
+	if err != nil {
+		logger.Printf("Failed to read PDF header: %v", err)
+		c.JSON(500, gin.H{"error": "Failed to read file"})
+		return
+	}
+
+	if string(header) != "%PDF" {
+		logger.Printf("Upload rejected - file does not appear to be a valid PDF (header: %s)", string(header))
+		c.JSON(400, gin.H{"error": "File must be a valid PDF"})
+		return
+	}
+
+	// Reset to beginning for pdfcpu
+	_, err = src.Seek(0, io.SeekStart)
+	if err != nil {
+		logger.Printf("Failed to reset file position: %v", err)
+		c.JSON(500, gin.H{"error": "Failed to reset file position"})
+		return
+	}
+
+	// Try to get page count using Go's ledongthuc/pdf library (lighter weight for just page counting)
+	pageCount, err := countPDFPagesFromReader(src)
+	if err != nil {
+		logger.Printf("Failed to count PDF pages: %v", err)
+		c.JSON(500, gin.H{"error": "Failed to process PDF: " + err.Error()})
+		return
+	}
+
+	// Generate a unique ID for this file
+	fileID := uuid.New().String()
+	logger.Printf("Successfully counted pages for file %s: %d pages (native Go)", fileID, pageCount)
+
+	c.JSON(200, PDFPageCount{
+		NumPages: pageCount,
+		FileID:   fileID,
+	})
+}
+
+// countPDFPagesFromReader counts pages in a PDF using a simple Go library
+func countPDFPagesFromReader(r io.ReadSeeker) (int, error) {
+	// Create a temporary file since ledongthuc/pdf needs a ReaderAt
+	tempFile, err := os.CreateTemp("", "pdf_count_*.pdf")
+	if err != nil {
+		return 0, fmt.Errorf("failed to create temp file: %w", err)
+	}
+	defer os.Remove(tempFile.Name())
+	defer tempFile.Close()
+
+	// Copy the uploaded file to temp file
+	_, err = io.Copy(tempFile, r)
+	if err != nil {
+		return 0, fmt.Errorf("failed to copy to temp file: %w", err)
+	}
+
+	// Get file size for the reader
+	stat, err := tempFile.Stat()
+	if err != nil {
+		return 0, fmt.Errorf("failed to stat temp file: %w", err)
+	}
+
+	// Open with ledongthuc/pdf
+	pdfReader, err := pdf.NewReader(tempFile, stat.Size())
+	if err != nil {
+		return 0, fmt.Errorf("failed to open PDF: %w", err)
+	}
+
+	return pdfReader.NumPage(), nil
 }
 
 func SaveStatement(c *gin.Context) {
