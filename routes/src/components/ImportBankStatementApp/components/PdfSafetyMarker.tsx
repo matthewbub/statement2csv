@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect } from "react";
 import { DrawingData } from "../ImportBankStatement.types";
 import PDFDrawingCanvas from "../../PDFDrawingCanvas";
