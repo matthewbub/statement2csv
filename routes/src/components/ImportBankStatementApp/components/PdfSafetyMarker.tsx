@@ -30,6 +30,9 @@ const PdfSafetyMarker: React.FC = () => {
   const setPagePreviews = importBankStatementStore(
     (state) => state.setPagePreviews
   );
+  const setRedactedPageFile = importBankStatementStore(
+    (state) => state.setRedactedPageFile
+  );
 
   useEffect(() => {
     if (
@@ -121,6 +124,18 @@ const PdfSafetyMarker: React.FC = () => {
 
       setIsDrawingMode(false);
       setSelectedPageForDrawing(null);
+
+      // Save the redacted PDF to the store
+      setRedactedPageFile(
+        selectedPageForDrawing,
+        new File(
+          [modifiedPdfBlob],
+          `redacted-page-${selectedPageForDrawing}.pdf`,
+          {
+            type: "application/pdf",
+          }
+        )
+      );
     } catch (error) {
       console.error("Error saving drawing:", error);
       setError(

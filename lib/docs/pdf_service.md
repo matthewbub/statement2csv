@@ -7,5 +7,3 @@ Client <-> Root Server <-> PDF Service
 ```
 
 This is a massive pain in the ass but so adding an authentication layer to the PDF Service. It would be better to rewrite the PDF Service in Go and ditch this extra micro service entirely, but I don't have time for that.
-
-## Endpoints

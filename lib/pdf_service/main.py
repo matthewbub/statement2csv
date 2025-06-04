@@ -170,7 +170,7 @@ def apply_drawing():
         # Get the page we want to modify
         page = new_doc[page_num]
         
-        # Add vector annotations
+        # Add redaction annotations (this will permanently remove underlying content)
         for shape in vector_shapes:
             if shape['type'] == 'rect':
                 rect = Rect(
@@ -180,14 +180,11 @@ def apply_drawing():
                     shape['top'] + shape['height']
                 )
                 
-                annot = page.add_rect_annot(rect)
-                
-                # Black color (0, 0, 0) with 100% opacity
-                annot.set_colors(
-                    stroke=(0, 0, 0),  # RGB black
-                    fill=(0, 0, 0, 1)  # RGBA black with 100% opacity for fill
-                )
-                annot.update()
+                # Add redaction annotation with black fill
+                page.add_redact_annot(rect, fill=(0, 0, 0))
+        
+        # Apply all redactions - this permanently removes the underlying content
+        page.apply_redactions()
         
         # Save with high quality
         output = io.BytesIO()

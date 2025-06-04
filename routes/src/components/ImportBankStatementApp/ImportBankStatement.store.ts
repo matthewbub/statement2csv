@@ -18,6 +18,7 @@ type State = {
   previewsLoading: boolean;
   isDrawingMode: boolean;
   selectedPageForDrawing: number | null;
+  redactedPageFiles: { [pageNum: number]: File };
 };
 
 type Action = {
@@ -31,6 +32,7 @@ type Action = {
   setPreviewsLoading: (previewsLoading: boolean) => void;
   setIsDrawingMode: (isDrawingMode: boolean) => void;
   setSelectedPageForDrawing: (selectedPageForDrawing: number | null) => void;
+  setRedactedPageFile: (pageNum: number, file: File) => void;
   submitSelectedPages: () => Promise<void>;
   handleFileChange: (file: File) => Promise<void>;
   loadPreviews: () => Promise<void>;
@@ -54,6 +56,7 @@ const importBankStatementStore = create<State & Action>()(
       previewsLoading: false,
       isDrawingMode: false,
       selectedPageForDrawing: null,
+      redactedPageFiles: {},
 
       // Actions
       setFile: (file) =>
@@ -164,10 +167,22 @@ const importBankStatementStore = create<State & Action>()(
           undefined,
           "ImportBankStatementStore/SetSelectedPageForDrawing"
         ),
+      setRedactedPageFile: (pageNum, file) =>
+        set(
+          (state) => ({
+            ...state,
+            redactedPageFiles: {
+              ...state.redactedPageFiles,
+              [pageNum]: file,
+            },
+          }),
+          undefined,
+          "ImportBankStatementStore/SetRedactedPageFile"
+        ),
 
       submitSelectedPages: async () => {
         const state = importBankStatementStore.getState();
-        const { pageSelection, file } = state;
+        const { pageSelection, file, redactedPageFiles } = state;
 
         if (
           !pageSelection ||
@@ -184,8 +199,36 @@ const importBankStatementStore = create<State & Action>()(
         );
 
         const formData = new FormData();
-        formData.append("file", file);
-        formData.append("pages", pageSelection.selectedPages.join(","));
+
+        // Check if any selected pages have redacted versions
+        const hasRedactedPages = pageSelection.selectedPages.some(
+          (pageNum) => redactedPageFiles[pageNum]
+        );
+
+        if (hasRedactedPages && pageSelection.selectedPages.length === 1) {
+          // If only one page is selected and it has a redacted version, use that
+          const pageNum = pageSelection.selectedPages[0];
+          const redactedFile = redactedPageFiles[pageNum];
+          if (redactedFile) {
+            formData.append("file", redactedFile);
+            formData.append("pages", "1"); // Redacted file is a single-page PDF
+          } else {
+            formData.append("file", file);
+            formData.append("pages", pageSelection.selectedPages.join(","));
+          }
+        } else if (hasRedactedPages) {
+          // Multiple pages with some redacted - need to merge PDFs
+          // For now, fall back to original file with a warning
+          console.warn(
+            "Multiple pages with redactions not yet supported - using original file"
+          );
+          formData.append("file", file);
+          formData.append("pages", pageSelection.selectedPages.join(","));
+        } else {
+          // No redacted pages, use original file
+          formData.append("file", file);
+          formData.append("pages", pageSelection.selectedPages.join(","));
+        }
 
         try {
           const response = await fetch("/api/v1/pdf/extract-text", {
@@ -200,6 +243,8 @@ const importBankStatementStore = create<State & Action>()(
             ...t,
             id: generateId("transaction-"),
           }));
+
+          console.log("data", data);
 
           set(
             {
@@ -452,23 +497,23 @@ const importBankStatementStore = create<State & Action>()(
           console.error("Failed to fetch transactions:", err);
         }
       },
-      reset: () => {
+      reset: () =>
         set(
           {
+            file: null,
+            pageSelection: null,
             statement: null,
             statement_copy: null,
-            pageSelection: null,
-            file: null,
             error: "",
             isLoading: false,
             previewsLoading: false,
             isDrawingMode: false,
             selectedPageForDrawing: null,
+            redactedPageFiles: {},
           },
           undefined,
           "ImportBankStatementStore/Reset"
-        );
-      },
+        ),
     }),
     {
       enabled: process.env.NODE_ENV === "development",

@@ -156,6 +156,7 @@ func ExtractPDFText(c *gin.Context) {
 	}
 
 	extractedText := pythonResp.Text
+	logger.Printf("Extracted text: %s", extractedText)
 
 	// Define the JSON schema for the response
 	jsonSchema := map[string]interface{}{
@@ -194,13 +195,13 @@ func ExtractPDFText(c *gin.Context) {
 						"For each transaction:\n"+
 						"1. Convert all currency amounts to positive numbers with exactly 2 decimal places (e.g., '$14.99' or '-$14.99' should become 14.99, '$0.3' should become 0.30)\n"+
 						"2. Mark the transaction type as 'debit' for expenses/withdrawals and 'credit' for deposits/incoming funds\n"+
-						"Format the response according to the schema. Here's the text:\n\n%s",
+						"Format the SELECTED TEXT according to the schema. Here's the SELECTED TEXT:\n\n%s",
 					extractedText,
 				),
 			},
 		},
 		"temperature": 0.7,
-		"max_tokens":  16384,
+		// "max_tokens":  16384,
 		"response_format": map[string]interface{}{
 			"type": "json_schema",
 			"json_schema": map[string]interface{}{
