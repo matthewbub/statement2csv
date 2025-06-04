@@ -183,7 +183,7 @@ func ExtractPDFText(c *gin.Context) {
 	}
 	// Prepare OpenAI request with the extracted text
 	payload := map[string]interface{}{
-		"model": "gpt-4o",
+		"model": "gpt-4.1-nano",
 		"messages": []map[string]interface{}{
 			{
 				"role": "user",
