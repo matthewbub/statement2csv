@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
-import { FileText } from "lucide-react";
+import { CheckCircle, Circle, FileText } from "lucide-react";
 
 const PdfPageSelector: React.FC = () => {
   const pageSelection = importBankStatementStore(
@@ -106,12 +106,17 @@ const PdfPageSelector: React.FC = () => {
                   aria-pressed={pageSelection.selectedPages.includes(pageNum)}
                   role="button"
                   onClick={() => handlePageSelection(pageNum)}
-                  className={`absolute bottom-2 right-2 px-2 py-1 rounded ${
+                  className={`absolute bottom-2 right-2 flex items-center gap-1 px-2 py-1 rounded transition-colors ${
                     pageSelection.selectedPages.includes(pageNum)
                       ? "bg-blue-600 text-white"
-                      : "bg-gray-200"
+                      : "bg-gray-200 hover:bg-gray-300"
                   }`}
                 >
+                  {pageSelection.selectedPages.includes(pageNum) ? (
+                    <CheckCircle className="w-4 h-4" />
+                  ) : (
+                    <Circle className="w-4 h-4" />
+                  )}
                   Page {pageNum}
                 </button>
               </div>

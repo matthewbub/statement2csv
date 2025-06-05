@@ -25,7 +25,7 @@ export function LandingPageComponent() {
       <div className="pb-24 sm:pb-20 pt-10">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <PrivateSecureFinancialAnalysis />
-          <div className="mt-16 flow-root">
+          <div className="container mx-auto mt-16 flow-root">
             <ImportBankStatement
               labels={{
                 title: "Import Bank Statement",

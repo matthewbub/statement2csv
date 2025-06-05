@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 export default function PrivateSecureFinancialAnalysis() {
   const isDarkReader = useDarkReader();
   return (
-    <div className="container mx-auto px-4 md:py-12 max-w-4xl relative">
+    <div className="container mx-auto px-4 md:py-12 relative">
       <div>
         <Eyebrow />
         <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl mb-6">

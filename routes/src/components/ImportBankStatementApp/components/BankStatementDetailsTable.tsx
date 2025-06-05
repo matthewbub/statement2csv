@@ -78,7 +78,9 @@ const BankStatementDetailsTable: React.FC<{
           color="green"
           name="select-all"
           checked={table.getIsAllRowsSelected()}
-          onChange={(checked) => table.toggleAllRowsSelected(checked)}
+          onCheckedChange={(checked) => {
+            table.toggleAllRowsSelected(checked);
+          }}
         />
       ),
       cell: ({ row }) => {
@@ -87,7 +89,7 @@ const BankStatementDetailsTable: React.FC<{
             color="green"
             name={`select-${row.id}`}
             checked={row.getIsSelected()}
-            onChange={(checked) => {
+            onCheckedChange={(checked) => {
               row.toggleSelected(checked);
             }}
           />
