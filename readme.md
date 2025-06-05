@@ -1,8 +1,6 @@
-# zcauldron
+# PDF to CSV
 
-"z cauldron"
-
-The `/lib/auth_v3` is the latest multi-tenant auth system, it's self documented with the open api spec. I'm actively working on a "template" `/lib/app` that talks to the multi-tenant api.
+The absolute safest way to convert bank statements to CSV format.
 
 ---
 
@@ -119,7 +117,9 @@ Client
 - [TanStack Router](https://tanstack.com/router) - Web routing system
 - [Vite](https://vite.dev/) - JavaScript build tool
 - [TypeScript](https://www.typescriptlang.org/) - Type safe javascript
-- [TailwindCSS + TailwindUI](https://tailwindui.com) - Prototype friendly component system
+- [TailwindCSS](https://tailwindcss.com) - Style framework
+- [Shadcn/ui](https://ui.shadcn.com/) - Accessible components built on top of TailwindCSS
+- [Fabric.js](https://fabricjs.com/) - Used for drawing on canvas (Pdf's)
 
 PDF Service (Micro Service /lib/pdf-service)
 
