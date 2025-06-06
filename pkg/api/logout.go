@@ -46,7 +46,7 @@ func LogoutHandler(c *gin.Context) {
 	}
 
 	// Clear the JWT cookie by setting an expired cookie
-	c.SetCookie(cookieConfig.Domain, "", int(cookieConfig.Expiration.Seconds()), "/", cookieConfig.Domain, cookieConfig.Secure, cookieConfig.HttpOnly)
+	c.SetCookie("jwt", "", int(cookieConfig.Expiration.Seconds()), "/", cookieConfig.Domain, cookieConfig.Secure, cookieConfig.HttpOnly)
 
 	c.JSON(http.StatusOK, response.SuccessMessage(
 		"Logged out successfully",

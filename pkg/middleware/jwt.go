@@ -15,7 +15,6 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Retrieve token from cookie
 		tokenString, err := c.Cookie("jwt")
-		log.Println("tokenString", tokenString)
 		if err != nil {
 			log.Println("error getting token from cookie", err)
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{})
