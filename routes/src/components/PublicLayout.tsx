@@ -60,7 +60,7 @@ export function PublicLayout({
       <main className="flex-1 mx-auto">{children}</main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          ZCauldron (Self Hosted) © 2025 by Mathew Bub is licensed under
+          ZCauldron (Self Hosted) © 2025 |
           <a
             className="text-xs hover:underline underline-offset-4"
             href="https://creativecommons.org/licenses/by-nc/4.0/"

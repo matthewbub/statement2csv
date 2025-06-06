@@ -59,6 +59,9 @@ const ImportBankStatement: React.FC<{
           onFileDrop={(files) => handleFileChange(files[0])}
           buttonLabel="Select PDF file"
           acceptedFileTypes={["application/pdf"]}
+          onReset={() => {
+            importBankStatementStore.getState().reset();
+          }}
         />
 
         {error && (

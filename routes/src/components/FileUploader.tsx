@@ -24,6 +24,9 @@ const FileUploader = ({
     "image/jpg",
   ],
   limit = 5,
+  onReset = () => {
+    return;
+  },
 }: {
   onFileDrop?: (files: File[]) => void;
   onFileChange?: (files: File[]) => void;
@@ -31,6 +34,7 @@ const FileUploader = ({
   dropZoneLabel?: string;
   acceptedFileTypes?: string[];
   limit?: number;
+  onReset?: () => void;
 }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -92,6 +96,15 @@ const FileUploader = ({
     fileInputRef.current?.click();
   };
 
+  const handleReset = () => {
+    setFiles([]);
+    // Clear the file input element's value to allow re-uploading the same file
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    onReset?.();
+  };
+
   return (
     <div>
       <div
@@ -140,18 +153,26 @@ const FileUploader = ({
       {files && files.length > 0 && (
         <div className="mt-4">
           <h4 className="text-sm font-medium text-gray-900">Selected files</h4>
-          <ul className="mt-2 divide-y divide-gray-200 rounded-md border border-gray-200">
-            {files.map((file, index) => (
-              <li
-                key={index}
-                className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
-              >
-                <div className="flex w-0 flex-1 items-center">
-                  <span className="ml-2 w-0 flex-1 truncate">{file.name}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <div className="flex items-center justify-between">
+            <ul className="mt-2 divide-y divide-gray-200 rounded-md border border-gray-200 w-full mr-8">
+              {files.map((file, index) => (
+                <li
+                  key={index}
+                  className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
+                >
+                  <div className="flex w-0 flex-1 items-center">
+                    <span className="ml-2 w-0 flex-1 truncate">
+                      {file.name}
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <Button onClick={handleReset} aria-label="Reset">
+              Restart
+            </Button>
+          </div>
         </div>
       )}
     </div>

@@ -49,7 +49,6 @@ export default function PrivateSecureFinancialAnalysis() {
             text: "Use our Privacy Tool to redact sensitive information",
             color: "text-blue-500",
           },
-          // { icon: Brain, text: "AI-powered analysis with no data storage" },
           {
             icon: XCircle,
             text: "Automatic rejection of documents containing sensitive data",
