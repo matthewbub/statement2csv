@@ -193,7 +193,7 @@ const importBankStatementStore = create<State & Action>()(
         }
 
         set(
-          { isLoading: true, error: "", statement: null },
+          { isLoading: true, error: "", statement: null, statement_copy: null },
           undefined,
           "ImportBankStatementStore/SubmitSelectedPages"
         );
@@ -368,8 +368,35 @@ const importBankStatementStore = create<State & Action>()(
         const { file, pageSelection } = state;
         if (!file || !pageSelection) return;
 
+        // Clean up existing preview URLs to prevent memory leaks
+        if (pageSelection.previews) {
+          Object.values(pageSelection.previews).forEach((url) => {
+            if (url) {
+              try {
+                URL.revokeObjectURL(url);
+              } catch (err) {
+                console.error("Failed to revoke object URL:", err);
+              }
+            }
+          });
+        }
+
         set(
           { previewsLoading: true },
+          undefined,
+          "ImportBankStatementStore/LoadPreviews"
+        );
+
+        // Reset previews to empty object
+        set(
+          (state) => ({
+            pageSelection: state.pageSelection
+              ? {
+                  ...state.pageSelection,
+                  previews: {},
+                }
+              : null,
+          }),
           undefined,
           "ImportBankStatementStore/LoadPreviews"
         );
@@ -497,7 +524,31 @@ const importBankStatementStore = create<State & Action>()(
           console.error("Failed to fetch transactions:", err);
         }
       },
-      reset: () =>
+      reset: () => {
+        const state = importBankStatementStore.getState();
+        
+        // Clean up existing preview URLs to prevent memory leaks
+        if (state.pageSelection?.previews) {
+          Object.values(state.pageSelection.previews).forEach((url) => {
+            if (url) {
+              try {
+                URL.revokeObjectURL(url);
+              } catch (err) {
+                console.error("Failed to revoke object URL:", err);
+              }
+            }
+          });
+        }
+
+        // Clean up redacted page files URLs if they exist
+        if (state.redactedPageFiles) {
+          Object.values(state.redactedPageFiles).forEach((file) => {
+            if (file && typeof file === 'object' && 'name' in file) {
+              // These are File objects, not URLs, so no cleanup needed
+            }
+          });
+        }
+
         set(
           {
             file: null,
@@ -513,7 +564,8 @@ const importBankStatementStore = create<State & Action>()(
           },
           undefined,
           "ImportBankStatementStore/Reset"
-        ),
+        );
+      },
     }),
     {
       enabled: process.env.NODE_ENV === "development",

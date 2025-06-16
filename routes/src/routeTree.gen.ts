@@ -8,118 +8,50 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignUpRouteImport } from './routes/sign-up'
+import { Route as SecurityQuestionsRouteImport } from './routes/security-questions'
+import { Route as MeRouteImport } from './routes/me'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as ErrorRouteImport } from './routes/error'
+import { Route as IndexRouteImport } from './routes/index'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as SignUpImport } from './routes/sign-up'
-import { Route as SecurityQuestionsImport } from './routes/security-questions'
-import { Route as MeImport } from './routes/me'
-import { Route as LoginImport } from './routes/login'
-import { Route as ForgotPasswordImport } from './routes/forgot-password'
-import { Route as ErrorImport } from './routes/error'
-import { Route as IndexImport } from './routes/index'
-
-// Create/Update Routes
-
-const SignUpRoute = SignUpImport.update({
+const SignUpRoute = SignUpRouteImport.update({
   id: '/sign-up',
   path: '/sign-up',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const SecurityQuestionsRoute = SecurityQuestionsImport.update({
+const SecurityQuestionsRoute = SecurityQuestionsRouteImport.update({
   id: '/security-questions',
   path: '/security-questions',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const MeRoute = MeImport.update({
+const MeRoute = MeRouteImport.update({
   id: '/me',
   path: '/me',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LoginRoute = LoginImport.update({
+const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const ForgotPasswordRoute = ForgotPasswordImport.update({
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const ErrorRoute = ErrorImport.update({
+const ErrorRoute = ErrorRouteImport.update({
   id: '/error',
   path: '/error',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-// Populate the FileRoutesByPath interface
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/error': {
-      id: '/error'
-      path: '/error'
-      fullPath: '/error'
-      preLoaderRoute: typeof ErrorImport
-      parentRoute: typeof rootRoute
-    }
-    '/forgot-password': {
-      id: '/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof ForgotPasswordImport
-      parentRoute: typeof rootRoute
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/me': {
-      id: '/me'
-      path: '/me'
-      fullPath: '/me'
-      preLoaderRoute: typeof MeImport
-      parentRoute: typeof rootRoute
-    }
-    '/security-questions': {
-      id: '/security-questions'
-      path: '/security-questions'
-      fullPath: '/security-questions'
-      preLoaderRoute: typeof SecurityQuestionsImport
-      parentRoute: typeof rootRoute
-    }
-    '/sign-up': {
-      id: '/sign-up'
-      path: '/sign-up'
-      fullPath: '/sign-up'
-      preLoaderRoute: typeof SignUpImport
-      parentRoute: typeof rootRoute
-    }
-  }
-}
-
-// Create and export the route tree
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -130,7 +62,6 @@ export interface FileRoutesByFullPath {
   '/security-questions': typeof SecurityQuestionsRoute
   '/sign-up': typeof SignUpRoute
 }
-
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/error': typeof ErrorRoute
@@ -140,9 +71,8 @@ export interface FileRoutesByTo {
   '/security-questions': typeof SecurityQuestionsRoute
   '/sign-up': typeof SignUpRoute
 }
-
 export interface FileRoutesById {
-  __root__: typeof rootRoute
+  __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/error': typeof ErrorRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -151,7 +81,6 @@ export interface FileRoutesById {
   '/security-questions': typeof SecurityQuestionsRoute
   '/sign-up': typeof SignUpRoute
 }
-
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
@@ -182,7 +111,6 @@ export interface FileRouteTypes {
     | '/sign-up'
   fileRoutesById: FileRoutesById
 }
-
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ErrorRoute: typeof ErrorRoute
@@ -191,6 +119,60 @@ export interface RootRouteChildren {
   MeRoute: typeof MeRoute
   SecurityQuestionsRoute: typeof SecurityQuestionsRoute
   SignUpRoute: typeof SignUpRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/security-questions': {
+      id: '/security-questions'
+      path: '/security-questions'
+      fullPath: '/security-questions'
+      preLoaderRoute: typeof SecurityQuestionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/me': {
+      id: '/me'
+      path: '/me'
+      fullPath: '/me'
+      preLoaderRoute: typeof MeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/error': {
+      id: '/error'
+      path: '/error'
+      fullPath: '/error'
+      preLoaderRoute: typeof ErrorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -202,47 +184,6 @@ const rootRouteChildren: RootRouteChildren = {
   SecurityQuestionsRoute: SecurityQuestionsRoute,
   SignUpRoute: SignUpRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/error",
-        "/forgot-password",
-        "/login",
-        "/me",
-        "/security-questions",
-        "/sign-up"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/error": {
-      "filePath": "error.tsx"
-    },
-    "/forgot-password": {
-      "filePath": "forgot-password.tsx"
-    },
-    "/login": {
-      "filePath": "login.tsx"
-    },
-    "/me": {
-      "filePath": "me.tsx"
-    },
-    "/security-questions": {
-      "filePath": "security-questions.tsx"
-    },
-    "/sign-up": {
-      "filePath": "sign-up.tsx"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
