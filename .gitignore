@@ -76,10 +76,9 @@ Thumbs.db
 dist
 
 # python
-.venv
+venv
+__pycache__
 
 *.log
 
 backups/
-
-__pycache__

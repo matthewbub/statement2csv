@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { DrawingData } from "../ImportBankStatement.types";
-import PDFDrawingCanvas from "../../PDFDrawingCanvas";
+import PDFDrawingCanvasPDFJS from "../../PDFDrawingCanvasPDFJS";
 import importBankStatementStore from "../ImportBankStatement.store";
 
 const PdfSafetyMarker: React.FC = () => {
@@ -33,6 +33,19 @@ const PdfSafetyMarker: React.FC = () => {
   const setRedactedPageFile = importBankStatementStore(
     (state) => state.setRedactedPageFile
   );
+
+  // Create PDF URL from file
+  const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
+
+  useEffect(() => {
+    if (file && isDrawingMode) {
+      const url = URL.createObjectURL(file);
+      setPdfUrl(url);
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    }
+  }, [file, isDrawingMode]);
 
   useEffect(() => {
     if (
@@ -148,14 +161,15 @@ const PdfSafetyMarker: React.FC = () => {
     !isDrawingMode ||
     selectedPageForDrawing === null ||
     selectedPageForDrawing === undefined ||
-    !pageSelection?.previews[selectedPageForDrawing]
+    !pdfUrl
   )
     return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <PDFDrawingCanvas
-        backgroundImage={pageSelection.previews[selectedPageForDrawing]}
+      <PDFDrawingCanvasPDFJS
+        pdfUrl={pdfUrl}
+        initialPage={selectedPageForDrawing}
         onSave={handleSaveDrawing}
         onClose={() => {
           setIsDrawingMode(false);

@@ -296,7 +296,8 @@ def extract_pdf_text():
                             'error': 'Document contains sensitive information and cannot be processed'
                         }), 400
                     text_parts.append(text)
-        
+        logger.debug(f"Extracted text parts for pages {pages}: {text_parts}")
+    
         return jsonify({
             'success': True,
             'text': '\n'.join(text_parts)
